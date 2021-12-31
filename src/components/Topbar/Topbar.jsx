@@ -8,7 +8,7 @@ import {
 const Topbar = () => {
   return (
     <header>
-      <nav className='topbarContainer h-12 w-full bg-blue-500 flex items-center sticky top-0'>
+      <nav className='topbarContainer h-12 w-full bg-blue-500 flex items-center fixed top-0 z-20'>
         <div className='topbarLeft w-3/12'>
           <span className='text-2xl ml-5 font-bold text-white cursor-pointer'>
             Fb Clone

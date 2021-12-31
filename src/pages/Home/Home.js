@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
       <Topbar />
-      <div className='homeContainer flex container mx-auto'>
+      <div className='homeContainer flex container mx-auto mt-12'>
         <Leftbar />
         <Feed />
         <Rightbar />
