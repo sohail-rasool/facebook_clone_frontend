@@ -17,6 +17,8 @@ const Post = ({ post }) => {
   const [like, setLike] = useState(post.like);
   const [isLiked, setIsLiked] = useState(false);
 
+  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+
   const likeHandler = () => {
     setLike(isLiked ? like - 1 : like + 1);
     setIsLiked(!isLiked);
@@ -29,7 +31,7 @@ const Post = ({ post }) => {
           <div className='postTopLeft flex items-center'>
             <img
               className='postProfileImg w-8 h-8 object-cover rounded-full'
-              src={userPic}
+              src={publicFolder + userPic}
               alt='postProfileImg'
             />
             <span className='text-base font-medium mx-2.5'>{userName}</span>
@@ -42,7 +44,7 @@ const Post = ({ post }) => {
         <div className='postCenter my-5'>
           <p className='postText'>{post.desc}</p>
           <img
-            src={post.photo}
+            src={publicFolder + post.photo}
             alt='user'
             className='postImg mt-5 w-full object-contain'
             style={{ maxHeight: '500px' }}

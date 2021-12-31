@@ -31,6 +31,7 @@ const Rightbar = ({ profile }) => {
   };
 
   const ProfileRightbarData = () => {
+    const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
     return (
       <>
         <h4 className='rightbarTitle text-xl font-semibold mb-2.5'>
@@ -62,7 +63,7 @@ const Rightbar = ({ profile }) => {
         <div className='rightbarFollowing flex flex-wrap justify-between'>
           <div className='rightbarFollowing flex flex-col mb-5 cursor-pointer'>
             <img
-              src='assets/person/1.jpeg'
+              src={`${publicFolder}person/1.jpeg`}
               className='rightbarFollowingImg w-24 h-24 rounded object-cover'
               alt='follow img'
             />
@@ -70,7 +71,7 @@ const Rightbar = ({ profile }) => {
           </div>
           <div className='rightbarFollowing flex flex-col mb-5 cursor-pointer'>
             <img
-              src='assets/person/1.jpeg'
+              src={`${publicFolder}person/1.jpeg`}
               className='rightbarFollowingImg w-24 h-24 rounded object-cover'
               alt='follow img'
             />

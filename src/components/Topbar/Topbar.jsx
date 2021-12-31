@@ -5,14 +5,18 @@ import {
   BsFillBellFill,
 } from 'react-icons/bs';
 
+import { Link } from 'react-router-dom';
+
 const Topbar = () => {
   return (
     <header>
       <nav className='topbarContainer h-12 w-full bg-blue-500 flex items-center fixed top-0 z-20'>
         <div className='topbarLeft w-3/12'>
-          <span className='text-2xl ml-5 font-bold text-white cursor-pointer'>
-            Fb Clone
-          </span>
+          <Link to='/'>
+            <span className='text-2xl ml-5 font-bold text-white cursor-pointer'>
+              Fb Clone
+            </span>
+          </Link>
         </div>
         <div className='topbarCenter w-5/12'>
           <div className='searchbar w-full h-8 bg-white rounded-3xl flex items-center'>
