@@ -1,20 +1,32 @@
-import React, { useState } from 'react';
+import { useState,useEffect } from 'react';
+import axios from 'axios'
+import {format} from 'timeago.js';
 
 import { MdMoreVert } from 'react-icons/md';
 import { FcLike } from 'react-icons/fc';
 import { BsHandThumbsUpFill } from 'react-icons/bs';
 
-import { Users } from '../../dummyData';
 
 const Post = ({ post }) => {
+
   const boxShadow = {
     boxShadow: '0px 0px 16px -8px rgba(0,0,0,0.68)',
   };
 
-  const userName = Users.filter((user) => user.id === post.id)[0].username;
-  const userPic = Users.filter((user) => user.id === post.id)[0].profilePicture;
+  const [user, setUser] = useState({})
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await axios.get(`users/${post.userId}`)
+      const data = response.data
+      setUser(data)
+      console.log(data)
+    }
+    fetchUser()
+  }, [])
 
-  const [like, setLike] = useState(post.like);
+
+
+  const [like, setLike] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(false);
 
   const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -31,20 +43,20 @@ const Post = ({ post }) => {
           <div className='postTopLeft flex items-center'>
             <img
               className='postProfileImg w-8 h-8 object-cover rounded-full'
-              src={publicFolder + userPic}
+              src={user.profilePicture || `${publicFolder}person/noAvatar.png`}
               alt='postProfileImg'
             />
-            <span className='text-base font-medium mx-2.5'>{userName}</span>
-            <span className='postDate text-xs'>{post.date}</span>
+            <span className='text-base font-medium mx-2.5'>{user.username}</span>
+            <span className='postDate text-xs'>{format(post.createdAt)}</span>
           </div>
           <div className='postTopRight'>
             <MdMoreVert className='text-2xl' />
           </div>
         </div>
         <div className='postCenter my-5'>
-          <p className='postText'>{post.desc}</p>
+          <p className='postText'>{post?.desc}</p>
           <img
-            src={publicFolder + post.photo}
+            src={publicFolder + post.img}
             alt='user'
             className='postImg mt-5 w-full object-contain'
             style={{ maxHeight: '500px' }}
@@ -66,7 +78,7 @@ const Post = ({ post }) => {
           </div>
           <div className='postBottomRight'>
             <p className='postCommentText cursor-pointer border-b-2 border-gray-400 border-dashed text-base'>
-              {post.comment} Comments
+              {post?.comment} Comments
             </p>
           </div>
         </div>
