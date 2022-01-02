@@ -1,18 +1,16 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import axios from 'axios'
-import {format} from 'timeago.js';
-import {Link} from 'react-router-dom'
+import { format } from 'timeago.js'
+import { Link } from 'react-router-dom'
 
-import { MdMoreVert } from 'react-icons/md';
-import { FcLike } from 'react-icons/fc';
-import { BsHandThumbsUpFill } from 'react-icons/bs';
-
+import { MdMoreVert } from 'react-icons/md'
+import { FcLike } from 'react-icons/fc'
+import { BsHandThumbsUpFill } from 'react-icons/bs'
 
 const Post = ({ post }) => {
-
   const boxShadow = {
     boxShadow: '0px 0px 16px -8px rgba(0,0,0,0.68)',
-  };
+  }
 
   const [user, setUser] = useState({})
   useEffect(() => {
@@ -24,17 +22,15 @@ const Post = ({ post }) => {
     fetchUser()
   }, [post.userId])
 
+  const [like, setLike] = useState(post.likes.length)
+  const [isLiked, setIsLiked] = useState(false)
 
-
-  const [like, setLike] = useState(post.likes.length);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER
 
   const likeHandler = () => {
-    setLike(isLiked ? like - 1 : like + 1);
-    setIsLiked(!isLiked);
-  };
+    setLike(isLiked ? like - 1 : like + 1)
+    setIsLiked(!isLiked)
+  }
 
   return (
     <div className='post w-100 rounded-lg my-8' style={boxShadow}>
@@ -44,11 +40,17 @@ const Post = ({ post }) => {
             <Link to={`/profile/${user.username}`}>
               <img
                 className='postProfileImg w-8 h-8 object-cover rounded-full'
-                src={user.profilePicture || `${publicFolder}person/noAvatar.png`}
+                src={
+                  user.profilePicture
+                    ? publicFolder + user.profilePicture
+                    : `${publicFolder}person/noAvatar.png`
+                }
                 alt='postProfileImg'
               />
             </Link>
-            <span className='text-base font-medium mx-2.5'>{user.username}</span>
+            <span className='text-base font-medium mx-2.5'>
+              {user.username}
+            </span>
             <span className='postDate text-xs'>{format(post.createdAt)}</span>
           </div>
           <div className='postTopRight'>
@@ -86,7 +88,7 @@ const Post = ({ post }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Post;
+export default Post

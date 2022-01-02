@@ -3,11 +3,16 @@ import {
   BsFillPersonFill,
   BsChatRightDotsFill,
   BsFillBellFill,
-} from 'react-icons/bs';
+} from 'react-icons/bs'
 
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../features/user/userSlice'
 
 const Topbar = () => {
+  const user = useSelector(selectUser)
+  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER
   return (
     <header>
       <nav className='topbarContainer h-12 w-full bg-blue-500 flex items-center fixed top-0 z-20'>
@@ -57,15 +62,21 @@ const Topbar = () => {
               </span>
             </div>
           </div>
-          <img
-            src='/assets/person/1.jpeg'
-            alt=''
-            className='topbarImg w-8 h-8 object-cover rounded-full cursor-pointer'
-          />
+          <Link to={`/profile/${user.username}`}>
+            <img
+              src={
+                user.profilePicture
+                  ? `${publicFolder}${user.profilePicture}`
+                  : `${publicFolder}person/noAvatar.png`
+              }
+              alt=''
+              className='topbarImg w-8 h-8 object-cover rounded-full cursor-pointer'
+            />
+          </Link>
         </div>
       </nav>
     </header>
-  );
-};
+  )
+}
 
-export default Topbar;
+export default Topbar
