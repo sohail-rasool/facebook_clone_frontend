@@ -1,17 +1,23 @@
 import { useRef } from 'react'
 import { loginCall } from '../../features/user/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import {selectIsFetching} from '../../features/user/userSlice'
+import Loader from '../../components/Loader/Loader'
+import { Link } from 'react-router-dom'
 
 const Login = () => {
   const dispatch = useDispatch()
+  const isFetching = useSelector(selectIsFetching)
 
   const userEmail = useRef()
   const userPassword = useRef()
   const formSubmitHandler = (e) => {
     e.preventDefault()
-    dispatch(loginCall(
-      { email: userEmail.current.value, password: userPassword.current.value }
-    ))
+    const userCreditails = {
+      email: userEmail.current.value,
+      password: userPassword.current.value,
+    }
+    dispatch(loginCall(userCreditails))
   }
   return (
     <div className='login w-screen h-screen bg-gray-100 flex items-center justify-center'>
@@ -44,18 +50,21 @@ const Login = () => {
               minLength={8}
               required
             />
-            <button className='loginButton h-12 bg-blue-500 text-white cursor-pointer text-xl font-medium rounded-lg'>
-              Login
+            <button type='submit' disabled={isFetching} className='loginButton h-12 bg-blue-500 text-white cursor-pointer text-xl font-medium rounded-lg disabled:bg-gray-300'>
+              {isFetching? <Loader /> : 'Login'}
             </button>
             <div className='loginForgot text-blue-500 text-center'>
               Forgot Password ?
             </div>
-            <button
-              type='submit'
-              className='loginRegisterButton h-12 bg-green-400 text-white cursor-pointer text-xl font-medium rounded-lg w-7/12 self-center'
-            >
-              Create New Account
-            </button>
+            <Link to='/register' className='w-full'>
+              <button
+                type='button'
+                disabled={isFetching}
+                className='loginRegisterButton h-12 bg-green-400 text-white cursor-pointer text-xl font-medium rounded-lg w-7/12 self-center disabled:bg-gray-300'
+              >
+                Create New Account
+              </button>
+            </Link>
           </form>
         </div>
       </div>

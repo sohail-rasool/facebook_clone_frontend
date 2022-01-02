@@ -10,14 +10,14 @@ const initialState = {
 export const loginCall = createAsyncThunk(
   'auth/login',
   async (userCreditails) => {
-      const response = await axios.post('auth/login', userCreditails)
-      const data = response.data
-			return data
+    const response = await axios.post('auth/login', userCreditails)
+    const data = response.data
+    return data
   }
-);
+)
 
 export const userSlice = createSlice({
-  name: 'counter',
+  name: 'user',
   initialState,
   reducers: {
     reducers: {},
@@ -34,7 +34,7 @@ export const userSlice = createSlice({
         state.isFetching = false
         state.error = ''
       })
-			.addCase(loginCall.rejected, (state, action) => {
+      .addCase(loginCall.rejected, (state, action) => {
         state.user = null
         state.isFetching = false
         state.error = action.error.message
@@ -42,5 +42,7 @@ export const userSlice = createSlice({
   },
 })
 
+export const selectUser = (state) => state.user.user;
+export const selectIsFetching = (state) => state.user.isFetching;
 
 export default userSlice.reducer
