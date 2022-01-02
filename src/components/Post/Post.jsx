@@ -1,6 +1,7 @@
 import { useState,useEffect } from 'react';
 import axios from 'axios'
 import {format} from 'timeago.js';
+import {Link} from 'react-router-dom'
 
 import { MdMoreVert } from 'react-icons/md';
 import { FcLike } from 'react-icons/fc';
@@ -16,13 +17,12 @@ const Post = ({ post }) => {
   const [user, setUser] = useState({})
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await axios.get(`users/${post.userId}`)
+      const response = await axios.get(`/users?userId=${post.userId}`)
       const data = response.data
       setUser(data)
-      console.log(data)
     }
     fetchUser()
-  }, [])
+  }, [post.userId])
 
 
 
@@ -41,11 +41,13 @@ const Post = ({ post }) => {
       <div className='postWrapper p-2.5'>
         <div className='postTop flex items-center justify-between'>
           <div className='postTopLeft flex items-center'>
-            <img
-              className='postProfileImg w-8 h-8 object-cover rounded-full'
-              src={user.profilePicture || `${publicFolder}person/noAvatar.png`}
-              alt='postProfileImg'
-            />
+            <Link to={`/profile/${user.username}`}>
+              <img
+                className='postProfileImg w-8 h-8 object-cover rounded-full'
+                src={user.profilePicture || `${publicFolder}person/noAvatar.png`}
+                alt='postProfileImg'
+              />
+            </Link>
             <span className='text-base font-medium mx-2.5'>{user.username}</span>
             <span className='postDate text-xs'>{format(post.createdAt)}</span>
           </div>

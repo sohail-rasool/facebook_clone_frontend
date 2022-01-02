@@ -1,7 +1,7 @@
 import Online from '../Online/Online';
 import { Users } from '../../dummyData';
 
-const Rightbar = ({ profile }) => {
+const Rightbar = ({ user }) => {
   const HomeRightbarData = () => {
     return (
       <>
@@ -42,19 +42,19 @@ const Rightbar = ({ profile }) => {
             <span className='rightbarInfoKey font-medium mb-3.5 text-gray-500'>
               City:
             </span>
-            <span className='rightbarInfoValue font-light'>New York</span>
+            <span className='rightbarInfoValue font-light'>{user.city}</span>
           </div>
           <div className='rightbarinfoItem mb-2.5'>
             <span className='rightbarInfoKey font-medium mb-3.5 text-gray-500'>
               From:
             </span>
-            <span className='rightbarInfoValue font-light'>New York</span>
+            <span className='rightbarInfoValue font-light'>{user.from}</span>
           </div>
           <div className='rightbarinfoItem'>
             <span className='rightbarInfoKey font-medium mb-3.5 text-gray-500'>
               Relationship:
             </span>
-            <span className='rightbarInfoValue font-light'>Married</span>
+            <span className='rightbarInfoValue font-light'>{user.relationship === 1? 'Single' : user.relationship === 1? 'Married' : '--'}</span>
           </div>
         </div>
         <h4 className='rightbarTitle text-xl font-semibold mb-2.5'>
@@ -85,8 +85,8 @@ const Rightbar = ({ profile }) => {
   return (
     <aside className='rightbar w-4/12'>
       <div className='rightbarWrapper pt-5 pr-5'>
-        {!profile && <HomeRightbarData />}
-        {profile && <ProfileRightbarData />}
+        {!user && <HomeRightbarData />}
+        {user && <ProfileRightbarData />}
       </div>
     </aside>
   );
