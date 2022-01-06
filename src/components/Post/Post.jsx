@@ -1,36 +1,52 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import { format } from 'timeago.js'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { format } from 'timeago.js';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/user/userSlice';
 
-import { MdMoreVert } from 'react-icons/md'
-import { FcLike } from 'react-icons/fc'
-import { BsHandThumbsUpFill } from 'react-icons/bs'
+import { MdMoreVert } from 'react-icons/md';
+import { FcLike } from 'react-icons/fc';
+import { BsHandThumbsUpFill } from 'react-icons/bs';
 
 const Post = ({ post }) => {
+  const [like, setLike] = useState(post.likes.length);
+  const [isLiked, setIsLiked] = useState(false);
+  const [user, setUser] = useState({});
+  const currentUser = useSelector(selectUser);
+
+  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  // style start
   const boxShadow = {
     boxShadow: '0px 0px 16px -8px rgba(0,0,0,0.68)',
-  }
+  };
+  // style end
 
-  const [user, setUser] = useState({})
+  useEffect(() => {
+    const alreadyIncludeUserId = post.likes.includes(currentUser._id);
+    setIsLiked(alreadyIncludeUserId);
+  }, [post.likes, currentUser._id]);
+
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await axios.get(`/users?userId=${post.userId}`)
-      const data = response.data
-      setUser(data)
+      const response = await axios.get(`/users?userId=${post.userId}`);
+      const data = response.data;
+      setUser(data);
+    };
+    fetchUser();
+  }, [post.userId]);
+
+  const likeHandler = async () => {
+    try {
+      await axios.put(`/posts/${post._id}/like`, { userId: currentUser._id });
+    } catch (error) {
+      console.log(error);
     }
-    fetchUser()
-  }, [post.userId])
 
-  const [like, setLike] = useState(post.likes.length)
-  const [isLiked, setIsLiked] = useState(false)
-
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER
-
-  const likeHandler = () => {
-    setLike(isLiked ? like - 1 : like + 1)
-    setIsLiked(!isLiked)
-  }
+    setLike(isLiked ? like - 1 : like + 1);
+    setIsLiked(!isLiked);
+  };
 
   return (
     <div className='post w-100 rounded-lg my-8' style={boxShadow}>
@@ -88,7 +104,7 @@ const Post = ({ post }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Post
+export default Post;
