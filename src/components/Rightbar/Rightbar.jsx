@@ -1,7 +1,60 @@
+import { useEffect, useState } from 'react';
 import Online from '../Online/Online';
 import { Users } from '../../dummyData';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser } from '../../features/user/userSlice';
+import { MdAddBox, MdRemoveCircle } from 'react-icons/md';
+
+import { followUser, unFollowUser } from '../../features/user/userSlice';
 
 const Rightbar = ({ user }) => {
+  const [friends, setFriends] = useState([]);
+  const dispatch = useDispatch();
+  const currentUser = useSelector(selectUser);
+  const [followed, setFollowed] = useState(
+    currentUser.followings.includes(user?._id)
+  );
+
+  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+
+  useEffect(() => {
+    const getFriends = async () => {
+      try {
+        const friendList = await axios.get(`/users/friends/${user._id}`);
+        const data = friendList.data;
+        setFriends(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getFriends();
+  }, [user]);
+
+  useEffect(() => {
+    setFollowed(currentUser.followings.includes(user?._id));
+  }, [currentUser, user]);
+
+  const followHandler = async () => {
+    try {
+      if (followed) {
+        await axios.put(`users/${user._id}/unfollow`, {
+          userId: currentUser._id,
+        });
+        dispatch(unFollowUser(user._id));
+      } else {
+        await axios.put(`users/${user._id}/follow`, {
+          userId: currentUser._id,
+        });
+        dispatch(followUser(user._id));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setFollowed(!followed);
+  };
+
   const HomeRightbarData = () => {
     return (
       <>
@@ -31,9 +84,18 @@ const Rightbar = ({ user }) => {
   };
 
   const ProfileRightbarData = () => {
-    const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
     return (
       <>
+        {user.username !== currentUser.username && (
+          <button
+            className='rightbarFollowButton flex items-center my-3 bg-blue-500 text-white p-2 rounded-md font-medium'
+            onClick={followHandler}
+          >
+            {followed ? <MdAddBox /> : <MdRemoveCircle />}{' '}
+            <span className='ml-2'>{followed ? 'UnFollow' : 'Follow'}</span>
+          </button>
+        )}
+
         <h4 className='rightbarTitle text-xl font-semibold mb-2.5'>
           User Information
         </h4>
@@ -54,29 +116,35 @@ const Rightbar = ({ user }) => {
             <span className='rightbarInfoKey font-medium mb-3.5 text-gray-500'>
               Relationship:
             </span>
-            <span className='rightbarInfoValue font-light'>{user.relationship === 1? 'Single' : user.relationship === 1? 'Married' : '--'}</span>
+            <span className='rightbarInfoValue font-light'>
+              {user.relationship === 1
+                ? 'Single'
+                : user.relationship === 1
+                ? 'Married'
+                : '--'}
+            </span>
           </div>
         </div>
         <h4 className='rightbarTitle text-xl font-semibold mb-2.5'>
           User Freinds
         </h4>
         <div className='rightbarFollowing flex flex-wrap justify-between'>
-          <div className='rightbarFollowing flex flex-col mb-5 cursor-pointer'>
-            <img
-              src={`${publicFolder}person/1.jpeg`}
-              className='rightbarFollowingImg w-24 h-24 rounded object-cover'
-              alt='follow img'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
-          </div>
-          <div className='rightbarFollowing flex flex-col mb-5 cursor-pointer'>
-            <img
-              src={`${publicFolder}person/1.jpeg`}
-              className='rightbarFollowingImg w-24 h-24 rounded object-cover'
-              alt='follow img'
-            />
-            <span className='rightbarFollowingName'>John Carter</span>
-          </div>
+          {friends.map((friend) => (
+            <Link key={friend._id} to={`/profile/${friend.username}`}>
+              <div className='rightbarFollowing flex flex-col mb-5 cursor-pointer'>
+                <img
+                  src={
+                    friend.profilePicture
+                      ? publicFolder + friend.profilePicture
+                      : `${publicFolder}person/1.jpeg`
+                  }
+                  className='rightbarFollowingImg w-24 h-24 rounded object-cover'
+                  alt='follow img'
+                />
+                <span className='rightbarFollowingName'>{friend.username}</span>
+              </div>
+            </Link>
+          ))}
         </div>
       </>
     );

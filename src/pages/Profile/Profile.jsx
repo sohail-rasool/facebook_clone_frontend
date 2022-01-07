@@ -30,7 +30,11 @@ const Profile = () => {
             <div className='profileCover h-340 relative'>
               <img
                 className='profileCoverImg w-full h-60 object-cover'
-                src={user.coverPicture || `${publicFolder}person/noCover.png`}
+                src={
+                  user.coverPicture
+                    ? publicFolder + user.coverPicture
+                    : `${publicFolder}person/noCover.png`
+                }
                 alt='profileCoverImg'
               />
               <img

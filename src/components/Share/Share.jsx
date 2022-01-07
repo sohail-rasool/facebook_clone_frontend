@@ -5,6 +5,7 @@ import {
   MdOutlineLabel,
   MdRoom,
   MdOutlineEmojiEmotions,
+  MdCancel,
 } from 'react-icons/md';
 
 import { useSelector } from 'react-redux';
@@ -30,10 +31,10 @@ const Share = () => {
 
     if (file) {
       const data = new FormData();
-      const fileName = Date.now() + file.name;
+      // const fileName = Date.now() + file.name;
       data.append('file', file);
-      data.append('name', fileName);
-      newPost.img = fileName;
+      data.append('name', file.name);
+      newPost.img = file.name;
 
       try {
         await axios.post(`/upload`, data);
@@ -43,13 +44,14 @@ const Share = () => {
     }
     try {
       await axios.post(`/posts`, newPost);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className='share w-full h-44 rounded-xl' style={boxShadow}>
+    <div className='share w-full rounded-xl' style={boxShadow}>
       <div className='shareWrapper p-2.5'>
         <div className='shareTop flex items-center'>
           <img
@@ -69,6 +71,19 @@ const Share = () => {
           />
         </div>
         <hr className='shareHr my-5' />
+        {file && (
+          <div className='shareImgContainer p-5 relative'>
+            <img
+              className='w-full object-cover h-72'
+              src={URL.createObjectURL(file)}
+              alt='privew'
+            />
+            <MdCancel
+              className='shareCancelImg absolute top-0 right-0'
+              onClick={() => setFile(null)}
+            />
+          </div>
+        )}
         <form
           className='shareBottom flex items-center justify-between'
           onSubmit={formSubmitHandler}
