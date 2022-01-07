@@ -39,12 +39,12 @@ const Rightbar = ({ user }) => {
   const followHandler = async () => {
     try {
       if (followed) {
-        await axios.put(`users/${user._id}/unfollow`, {
+        await axios.put(`/users/${user._id}/unfollow`, {
           userId: currentUser._id,
         });
         dispatch(unFollowUser(user._id));
       } else {
-        await axios.put(`users/${user._id}/follow`, {
+        await axios.put(`/users/${user._id}/follow`, {
           userId: currentUser._id,
         });
         dispatch(followUser(user._id));

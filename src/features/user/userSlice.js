@@ -35,16 +35,12 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     followUser: (state, action) => {
-      state.user = {
-        followings: [...(state.user.followings = action.payload)],
-      };
+      state.user.followings = [action.payload];
     },
     unFollowUser: (state, action) => {
-      state.user = {
-        followings: state.user.followings.filter(
-          (following) => following !== action.payload
-        ),
-      };
+      state.user.followings = state.user.followings.filter(
+        (following) => following !== action.payload
+      );
     },
   },
   extraReducers: (builder) => {
