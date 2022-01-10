@@ -3,16 +3,16 @@ import {
   BsFillPersonFill,
   BsChatRightDotsFill,
   BsFillBellFill,
-} from 'react-icons/bs'
+} from 'react-icons/bs';
 
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-import { useSelector } from 'react-redux'
-import { selectUser } from '../../features/user/userSlice'
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/user/userSlice';
 
 const Topbar = () => {
-  const user = useSelector(selectUser)
-  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER
+  const user = useSelector(selectUser);
+  const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
   return (
     <header>
       <nav className='topbarContainer h-12 w-full bg-blue-500 flex items-center fixed top-0 z-20'>
@@ -50,10 +50,12 @@ const Topbar = () => {
               </span>
             </div>
             <div className='topbarIconItem cursor-pointer ml-4 relative'>
-              <BsChatRightDotsFill className='text-2xl' />
-              <span className='topbarIconBadge h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute -top-1 -right-1 text-xs'>
-                <span>1</span>
-              </span>
+              <Link to='/messenger'>
+                <BsChatRightDotsFill className='text-2xl' />
+                <span className='topbarIconBadge h-4 w-4 bg-red-500 rounded-full flex items-center justify-center text-white absolute -top-1 -right-1 text-xs'>
+                  <span>1</span>
+                </span>
+              </Link>
             </div>
             <div className='topbarIconItem cursor-pointer ml-4 relative'>
               <BsFillBellFill className='text-2xl' />
@@ -76,7 +78,7 @@ const Topbar = () => {
         </div>
       </nav>
     </header>
-  )
-}
+  );
+};
 
-export default Topbar
+export default Topbar;
